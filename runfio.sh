@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-block_sizes=( 4 8 16 32 64 128 256 512 1024 2048 4096 8192 16384 32768)
+block_sizes=( 4 8 16 32 64 128 256 512 1024 2048 4096 8192 16384 32768 )
 
 function usage() {
         echo
@@ -88,14 +88,16 @@ done
 str="$(fio --version)"
 version="${str:4:1}"
 
-if [ $version -eq 3 ]; then
-	if [ $(grep 'bw=' "${directory}/${bs}.txt" | awk '{print $2}' | grep "K") -eq "" ]; then
+if [ "$version" -eq 3 ]; then
+	check=$(grep 'bw=' "${directory}/${bs}.txt" | awk '{print $2}' | grep "K")
+	if [ "$check" = "" ]; then
 		echo "Block Size (KB),Throughput (MB/s)" > "${directory}/out.txt"
 	else
 		echo "Block Size (KB),Throughput (KB/s)" > "${directory}/out.txt"
 	fi
 else
-	if [ $(grep 'aggrb=' "${directory}/${bs}.txt" | awk '{print $3}' | grep "K") -eq "" ]; then
+	check=$(grep 'aggrb=' "${directory}/${bs}.txt" | awk '{print $3}' | grep "K")
+	if [ "$check" = "" ]; then
 		echo "Block Size (KB),Throughput (MB/s)" > "${directory}/out.txt"
 	else
 		echo "Block Size (KB),Throughput (KB/s)" > "${directory}/out.txt"
@@ -104,7 +106,7 @@ fi
 
 for bs in ${block_sizes[@]}; do
 	echo -n "$bs," >> "${directory}/out.txt"
-	if [ $version -eq 3 ]; then
+	if [ "$version" -eq 3 ]; then
 		grep 'bw=' "${directory}/${bs}.txt" | awk '{print $2}' | grep -o '[0-9.]*' >> "${directory}/out.txt"
 	else
 		grep 'aggrb=' "${directory}/${bs}.txt" | awk '{print $3}' | grep -o '[0-9.]*' >> "${directory}/out.txt"
