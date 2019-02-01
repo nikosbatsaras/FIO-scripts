@@ -82,13 +82,19 @@ for bs in ${block_sizes[@]}; do
 	if [ $(cat "/sys/block/${blockdevice}/queue/rotational") -eq 0 ]; then
 		sudo blkdiscard /dev/"$blockdevice"
 	fi
-	{ sudo SIZE='20%' BLOCK_SIZE="${bs}k" DEVICE="$blockdevice" IODEPTH="$iodepth" NJOBS="$njobs" fio "$file" ; } 2>&1 >> "${directory}/${bs}.txt"
+	{ sudo SIZE='80%' BLOCK_SIZE="${bs}k" DEVICE="$blockdevice" IODEPTH="$iodepth" NJOBS="$njobs" fio "$file" ; } 2>&1 >> "${directory}/${bs}.txt"
 done
 
 echo "Block Size (KB),Throughput (MB/s)" > "${directory}/out.txt"
 
+str="$(fio --version)"
+version="${str:4:1}"
+
 for bs in ${block_sizes[@]}; do
 	echo -n "$bs," >> "${directory}/out.txt"
-	grep 'bw=' "${directory}/${bs}.txt" | awk '{print $2}' | grep -o '[0-9.]*' >> "${directory}/out.txt"
-	#grep 'aggrb=' "${directory}/${bs}.txt" | awk '{print $3}' | grep -o '[0-9.]*' >> "${directory}/out.txt"
+	if [ $version -eq 3 ]; then
+		grep 'bw=' "${directory}/${bs}.txt" | awk '{print $2}' | grep -o '[0-9.]*' >> "${directory}/out.txt"
+	else
+		grep 'aggrb=' "${directory}/${bs}.txt" | awk '{print $3}' | grep -o '[0-9.]*' >> "${directory}/out.txt"
+	fi
 done
