@@ -1,0 +1,12 @@
+[rand-write]
+rw=randwrite
+size=${SIZE}
+bs=${BLOCK_SIZE}
+direct=1
+filename=/dev/${DEVICE}
+iodepth=64
+ioengine=libaio
+time_based
+runtime=10
+numjobs=${NJOBS}
+thread

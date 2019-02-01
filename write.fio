@@ -1,0 +1,12 @@
+[write]
+rw=write
+size=${SIZE}
+bs=${BLOCK_SIZE}
+direct=1
+filename=/dev/${DEVICE}
+iodepth=${IODEPTH}
+ioengine=libaio
+time_based
+runtime=20
+numjobs=${NJOBS}
+thread
