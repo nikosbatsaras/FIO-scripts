@@ -85,10 +85,22 @@ for bs in ${block_sizes[@]}; do
 	{ sudo SIZE='80%' BLOCK_SIZE="${bs}k" DEVICE="$blockdevice" IODEPTH="$iodepth" NJOBS="$njobs" fio "$file" ; } 2>&1 >> "${directory}/${bs}.txt"
 done
 
-echo "Block Size (KB),Throughput (MB/s)" > "${directory}/out.txt"
-
 str="$(fio --version)"
 version="${str:4:1}"
+
+if [ $version -eq 3 ]; then
+	if [ $(grep 'bw=' "${directory}/${bs}.txt" | awk '{print $2}' | grep "K") -eq "" ]; then
+		echo "Block Size (KB),Throughput (MB/s)" > "${directory}/out.txt"
+	else
+		echo "Block Size (KB),Throughput (KB/s)" > "${directory}/out.txt"
+	fi
+else
+	if [ $(grep 'aggrb=' "${directory}/${bs}.txt" | awk '{print $3}' | grep "K") -eq "" ]; then
+		echo "Block Size (KB),Throughput (MB/s)" > "${directory}/out.txt"
+	else
+		echo "Block Size (KB),Throughput (KB/s)" > "${directory}/out.txt"
+	fi
+fi
 
 for bs in ${block_sizes[@]}; do
 	echo -n "$bs," >> "${directory}/out.txt"
