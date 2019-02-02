@@ -8,7 +8,7 @@ FIO_SCRIPTS='FIO-scripts'
 OUTPUT=$(date "+%F_%R")
 OUTPUT="FIO-${OUTPUT}"
 
-mkdir "FIO-$OUTPUT"
+mkdir "$OUTPUT"
 
 for DEVICE in ${DEVICES}; do
 	# RANDOM WRITES

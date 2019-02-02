@@ -7,6 +7,6 @@ filename=/dev/${DEVICE}
 iodepth=64
 ioengine=libaio
 time_based
-runtime=10
+runtime=20
 numjobs=${NJOBS}
 thread
