@@ -42,11 +42,11 @@ If you've performed a sequential run as well, you can do:
 ```bash
 plotfio.py -r sdb_random_writes/out.txt -s sdb_sequential_writes/out.txt -o . -n "SDB_W" -t "Writes with 32 IO Queue Depth"
 ```
-This will plot two curves, one for random and one for sequential I/O.
+This will plot two curves, one for random and one for sequential I/O. For example:
+![samplehddrun](https://user-images.githubusercontent.com/23704715/52161840-18a68800-26d4-11e9-9fd4-17fc4dfd752a.png)
 
 # Complete Benchmarks
 In this section, we showcase how to perform a more complete set of benchmarks.
-The whole process is automated by the scripts provided.
 ## Run
 TODO
 ## Plot

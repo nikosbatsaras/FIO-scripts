@@ -80,12 +80,12 @@ fi
 
 echo
 echo "==========================="
-echo "Staring run with:"
-echo "  Device:  $blockdevice"
-echo "  IODEPTH: $iodepth"
-echo "  NUMJOBS: $njobs"
+echo "Starting run with:"
+echo "    Device:  $blockdevice"
+echo "    IODEPTH: $iodepth"
+echo "    NUMJOBS: $njobs"
 echo
-echo -n "  Block Size: "
+echo -n "    Block Size: "
 for bs in ${block_sizes[@]}; do
 	if [ $(cat "/sys/block/${blockdevice}/queue/rotational") -eq 0 ]; then
 		sudo blkdiscard /dev/"$blockdevice"
