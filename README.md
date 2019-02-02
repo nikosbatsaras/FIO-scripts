@@ -47,6 +47,14 @@ This will plot two curves, one for random and one for sequential I/O.
 # Complete Benchmarks
 In this section, we showcase how to perform a more complete set of benchmarks.
 ## Run
-TODO
+First, edit the fiodriver.sh script to set your configuration. Then, run:
+```bash
+fiodriver.sh
+```
+You can perform runs to get a dataset of:
+- Random Reads/Writes and Sequential Reads/Writes
+- for a variety of different I/O Queue Depths
+- for different block sizes
+- on several devices
 ## Plot
 TODO
