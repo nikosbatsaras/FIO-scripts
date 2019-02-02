@@ -52,9 +52,15 @@ First, edit the fiodriver.sh script to set your configuration. Then, run:
 fiodriver.sh
 ```
 You can perform runs to get a dataset of:
-- Random Reads/Writes and Sequential Reads/Writes
+- Random/Sequential Reads and Writes
 - for a variety of different I/O Queue Depths
 - for different block sizes
 - on several devices
 ## Plot
-TODO
+You can generate a plot for a device, showing throughput with different I/O
+Queue Depths like this:
+```bash
+plotiodepth.py -f rand_w_sdb_1iodepth_8threads/out.txt rand_w_sdb_4iodepth_8threads/out.txt rand_w_sdb_16iodepth_8threads/out.txt rand_w_sdb_1iodepth_32threads/out.txt rand_w_sdb_1iodepth_64threads/out.txt -o . -n "SDB_RAND_W" -t "Random Writes with various IO Queue Depths"
+```
+This will produce a plot with 5 curves, each showcasing the throughput of
+device sdb with I/O Queue Depths of 1, 4, 16, 32 and 64.
