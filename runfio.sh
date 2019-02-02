@@ -81,7 +81,7 @@ fi
 echo
 echo "===================================================================================================="
 echo
-echo "Staring run with: $file"
+echo "Starting run with: $file"
 echo
 echo "    Device:  $blockdevice"
 echo "    IODEPTH: $iodepth"
