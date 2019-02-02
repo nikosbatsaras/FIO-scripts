@@ -79,13 +79,16 @@ if [ -z $directory ]; then
 fi
 
 echo
-echo "==========================="
-echo "Starting run with:"
+echo "===================================================================================================="
+echo
+echo "Staring run with: $file"
+echo
 echo "    Device:  $blockdevice"
 echo "    IODEPTH: $iodepth"
 echo "    NUMJOBS: $njobs"
 echo
 echo -n "    Block Size: "
+STARTTIME=$(date +%s)
 for bs in ${block_sizes[@]}; do
 	if [ $(cat "/sys/block/${blockdevice}/queue/rotational") -eq 0 ]; then
 		sudo blkdiscard /dev/"$blockdevice"
@@ -94,7 +97,13 @@ for bs in ${block_sizes[@]}; do
 	{ sudo SIZE='80%' BLOCK_SIZE="${bs}k" DEVICE="$blockdevice" IODEPTH="$iodepth" NJOBS="$njobs" fio "$file" ; } 2>&1 >> "${directory}/${bs}.txt"
 done
 echo
-echo "==========================="
+ENDTIME=$(date +%s)
+ELAPSEDTIME=$(($ENDTIME - $STARTTIME))
+FORMATED="$(($ELAPSEDTIME / 3600))h:$(($ELAPSEDTIME % 3600 / 60))m:$(($ELAPSEDTIME % 60))s"
+echo
+echo "    Benchmark time elapsed: $FORMATED"
+echo
+echo "===================================================================================================="
 echo
 
 str="$(fio --version)"
