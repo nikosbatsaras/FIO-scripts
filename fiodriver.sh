@@ -10,7 +10,7 @@ OUTPUT="FIO-${OUTPUT}"
 
 mkdir "$OUTPUT"
 
-for DEVICE in ${DEVICES}; do
+for DEVICE in ${DEVICES[@]}; do
 	for IOD in ${IODEPTH[@]}; do
 		# RANDOM WRITES
 		./runfio.sh -d "$DEVICE" -n "$THREADS" -i "$IOD" -f "${FIO_SCRIPTS}/rand-write.fio" -o "${OUTPUT}/rand_w_${DEVICE}_${IOD}iodepth_${THREADS}threads"
