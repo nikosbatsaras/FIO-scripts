@@ -10,6 +10,8 @@ OUTPUT="FIO-${OUTPUT}"
 
 mkdir "$OUTPUT"
 
+STARTTIME=$(date +%s)
+
 for DEVICE in ${DEVICES[@]}; do
 	for IOD in ${IODEPTH[@]}; do
 		# RANDOM WRITES
@@ -23,3 +25,12 @@ for DEVICE in ${DEVICES[@]}; do
 		./runfio.sh -d "$DEVICE" -n 1 -i "$IOD" -f "${FIO_SCRIPTS}/read.fio"  -o "${OUTPUT}/seq_r_${DEVICE}_${IOD}iodepth"
 	done
 done
+
+ENDTIME=$(date +%s)
+ELAPSEDTIME=$(($ENDTIME - $STARTTIME))
+FORMATED="$(($ELAPSEDTIME / 3600))h:$(($ELAPSEDTIME % 3600 / 60))m:$(($ELAPSEDTIME % 60))s"
+
+echo
+echo
+echo "  Overall time elapsed: $FORMATED"
+echo
