@@ -5,55 +5,70 @@ import numpy as np
 import csv, argparse
 
 parser = argparse.ArgumentParser()
-parser.add_argument('-r', dest="randfile", required=False, help="Input file with rand data")
-parser.add_argument('-s', dest="seqfile", required=False, help="Input file with seq data")
+parser.add_argument('-f', dest="files", type=str, nargs='+', required=True, help='The out.txt files')
+parser.add_argument('-l', dest="labels", type=str, nargs='+', required=True, help='Label for each curve')
+parser.add_argument('-m', dest="markers", type=str, nargs='+', required=False, help='Marker for each curve')
+parser.add_argument('-s', dest="scale", type=str, required=False, help='Scale of y-axis')
+parser.add_argument('-x', dest="xlabel", type=str, required=True, help='Label of x-axis')
+parser.add_argument('-y', dest="ylabel", type=str, required=True, help='Label of y-axis')
 parser.add_argument('-o', dest="outputfolder", required=True, help="Ouput folder")
 parser.add_argument('-n', dest="name", required=True, help="Name of output plot")
 parser.add_argument('-t', dest="title", required=True, help="Title of output plot")
 args = parser.parse_args()
 
-files = []
+scale = None
 
-if args.randfile is not None:
-    files.append(args.randfile)
+if args.scale is not None:
+    scale = args.scale
 
-if args.seqfile is not None:
-    files.append(args.seqfile)
+index = 0
 
-if not files:
-    print("ERROR: No files were given!")
-    exit()
+for f in args.files:
+    with open(f, 'r') as csvfile:
+        reader = csv.reader(csvfile, delimiter=',')
+        header = next(reader, None)
 
-for f in files:
-    csvfile = open(f, 'r')
+        x, y = [], []
+        for row in reader:
+            x.append(int(row[0]))
 
-    reader = csv.reader(csvfile, delimiter=',')
-    header = next(reader, None)
+            if scale == "MB":
+                if "MB" in header[1]:
+                    y.append(float(row[1]))
+                elif "KB" in header[1]:
+                    y.append(float(row[1]) / float(1024))
 
-    x, y = [], []
-    for row in reader:
-        x.append(int(row[0]))
-        y.append(float(row[1]))
+            elif scale == "GB":
+                if "MB" in header[1]:
+                    y.append(float(row[1]) / float(1024))
+                elif "KB" in header[1]:
+                    y.append(float(row[1]) / float(1024*1024))
 
-    N  = len(x)
-    x2 = np.arange(N)
+            else:
+                    y.append(float(row[1]))
 
-    if f == args.randfile:
-        plt.plot(x2, y, label="Random")
-    elif f == args.seqfile:
-        plt.plot(x2, y, label="Sequential")
+        N  = len(x)
+        x2 = np.arange(N)
 
-    plt.xticks(x2, x, rotation=90)
+        if args.markers is not None:
+            plt.plot(x2, y, marker=args.markers[index], markersize=7, fillstyle='none', label=args.labels[index])
+        else:
+            plt.plot(x2, y, label=args.labels[index])
 
-    csvfile.close()
+        plt.xticks(x2, x, rotation=90)
+
+        index += 1
+
+plt.xlabel(args.xlabel)
+plt.ylabel(args.ylabel)
 
 plt.xlim(xmin=0)
 plt.ylim(ymin=0)
-plt.xlabel(header[0])
-plt.ylabel(header[1])
 
 plt.title(args.title)
 plt.legend()
+
+plt.tight_layout()
 
 plt.show()
 #plt.savefig(args.outputfolder+"/"+args.name+".eps", format="eps")
