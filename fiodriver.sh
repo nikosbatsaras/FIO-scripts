@@ -1,12 +1,47 @@
 #!/usr/bin/env bash
 
 DEVICES=( sdb )
-THREADS=8
+THREADS=1
 IODEPTH=( 1 4 16 32 64 )
-FIO_SCRIPTS='FIO-scripts'
+FIO_SCRIPTS='scripts'
 
-OUTPUT=$(date "+%F_%R")
-OUTPUT="FIO-${OUTPUT}"
+function usage() {
+        echo
+        echo "Usage:"
+        echo "      fiodriver.sh -o <output-dir> [-h]"
+        echo
+        echo "Options:"
+        echo "      -o   Output directory"
+        echo "      -h   Show usage"
+        echo
+
+        exit 1
+}
+
+while getopts ":o:h" opt
+do
+        case $opt in
+		o)
+			if [ ! -d "$OPTARG" ]; then
+				mkdir "$OPTARG"
+			fi
+			DIRECTORY="$OPTARG";;
+                \?)
+                        echo "ERROR: Invalid option: -$OPTARG" >&2; usage;;
+                :)
+                        echo "ERROR: Option -$OPTARG requires an argument." >&2; usage;;
+                h | *)
+                        usage;;
+        esac
+done
+
+if [ -z $DIRECTORY ]; then
+        echo "ERROR: Output directory not specified" >&2
+        usage
+fi
+
+DATE=$(date "+%F_%R")
+OUTPUT="${DIRECTORY}/${DATE}"
 
 mkdir "$OUTPUT"
 
