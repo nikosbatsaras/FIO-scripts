@@ -9,9 +9,9 @@ function usage() {
         echo
         echo "Options:"
         echo "      -d   Block device to test"
-        echo "      -n   Number of processes/threads performing this workload"
+	echo "      -n   Number of FIO processes/threads (numjobs)"
 	echo "      -i   Number of outstanding I/Os (iodepth)"
-        echo "      -f   Script containing FIO options"
+        echo "      -f   Script containing the rest of FIO options"
         echo "      -o   Output directory"
         echo "      -h   Show usage"
         echo
