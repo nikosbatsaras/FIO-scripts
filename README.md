@@ -37,7 +37,8 @@ block size.
 ## Plot
 In order to create a plot from the output, you can use the plotfio.py script:
 ```
-Usage: plotfio.py [ -h ]
+Usage:
+       plotfio.py [ -h ]
                     -f FILES      [FILES ... ] 
                     -l LABELS    [LABELS ... ]
 		  [ -m MARKERS [MARKERS  ...]]
@@ -76,9 +77,19 @@ The 'out.txt' files are the ones that plotfio.py needs.
 # Complete Benchmarks
 In this section, we showcase how to perform a more complete set of benchmarks.
 ## Run
-First, edit the fiodriver.sh script to set your configuration. Then, run:
+First, edit the fiodriver.sh script to set your configuration. The script can
+be used like this:
+```
+Usage:
+      fiodriver.sh -o <output-dir> [-h]
+
+Options:
+      -o   Output directory
+      -h   Show usage
+```
+An example run is the following:
 ```bash
-fiodriver.sh
+fiodriver.sh -o SAMSUNG_850_PRO
 ```
 You can perform runs to get a dataset of:
 - Random/Sequential Reads and Writes
@@ -91,5 +102,7 @@ Queue Depths like this:
 ```bash
 plotiodepth.py -f rand_w_sdb_1iodepth_8threads/out.txt rand_w_sdb_4iodepth_8threads/out.txt rand_w_sdb_16iodepth_8threads/out.txt rand_w_sdb_32iodepth_8threads/out.txt rand_w_sdb_64iodepth_8threads/out.txt -o . -n "SDB_RAND_W" -t "Random Writes with various IO Queue Depths"
 ```
+or use the previous script, plotfio.py, for a more fine-grained control of the plot.
+
 This will produce a plot with 5 curves, each showcasing the throughput of
 device sdb with I/O Queue Depths of 1, 4, 16, 32 and 64.
