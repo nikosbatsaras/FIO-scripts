@@ -18,7 +18,6 @@ for (( i=0; i<${#DIRS[@]}; i++ )); do
 	FILES_RAND_W=( )
 	FILES_RAND_R=( )
 
-	# RANDOM WRITES
 	for IODEPTH in ${IODEPTHS[@]}; do
 		FILES_W+=( "${FIO_DIR}"/"${DIRS[i]}"/seq_w_"${DEVS[i]}"_"${IODEPTH}"iodepth/out.txt )
 		FILES_R+=( "${FIO_DIR}"/"${DIRS[i]}"/seq_r_"${DEVS[i]}"_"${IODEPTH}"iodepth/out.txt )
@@ -26,6 +25,7 @@ for (( i=0; i<${#DIRS[@]}; i++ )); do
 		FILES_RAND_R+=( "${FIO_DIR}"/"${DIRS[i]}"/rand_r_"${DEVS[i]}"_"${IODEPTH}"iodepth_1threads/out.txt )
 	done
 
+	# RANDOM WRITES
 	./plotfio.py                               \
 		-f "${FILES_RAND_W[@]}"            \
 		-l "${LABELS[@]}"                  \
