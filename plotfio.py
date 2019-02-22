@@ -70,5 +70,5 @@ plt.legend()
 
 plt.tight_layout()
 
-plt.show()
-#plt.savefig(args.outputfolder+"/"+args.name+".eps", format="eps")
+#plt.show()
+plt.savefig(args.outputfolder+"/"+args.name+".eps", format="eps")
