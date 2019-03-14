@@ -3,20 +3,20 @@
 block_sizes=( 4 8 16 32 64 128 256 512 1024 2048 4096 8192 )
 
 function usage() {
-        echo
-        echo "Usage:"
-        echo "      runfio.sh -d <device> -n <njobs> -i <iodepth> -f <script> -o <output-dir> [-h]"
-        echo
-        echo "Options:"
-        echo "      -d   Block device to test"
+	echo
+	echo "Usage:"
+	echo "      runfio.sh -d <device> -n <njobs> -i <iodepth> -f <script> -o <output-dir> [-h]"
+	echo
+	echo "Options:"
+	echo "      -d   Block device to test"
 	echo "      -n   Number of FIO processes/threads (numjobs)"
 	echo "      -i   Number of outstanding I/Os (iodepth)"
-        echo "      -f   Script containing the rest of FIO options"
-        echo "      -o   Output directory"
-        echo "      -h   Show usage"
-        echo
+	echo "      -f   Script containing the rest of FIO options"
+	echo "      -o   Output directory"
+	echo "      -h   Show usage"
+	echo
 
-        exit 1
+	exit 1
 }
 
 while getopts ":d:n:i:f:o:h" opt
@@ -30,7 +30,7 @@ do
                         check=$(mount | grep "$OPTARG")
                         if [ ! "$check" = '' ]; then
                                 echo "ERROR: Block device $OPTARG is in use. Use another one."
-                                exit 1
+				exit 1
                         fi
         
                         blockdevice="$OPTARG";;
@@ -112,15 +112,19 @@ version="${str:4:1}"
 if [ "$version" -eq 3 ]; then
 	check=$(grep 'bw=' "${directory}/${bs}.txt" | awk '{print $2}' | grep "K")
 	if [ "$check" = "" ]; then
+		scale="MB"
 		echo "Block Size (KB),Throughput (MB/s)" > "${directory}/out.txt"
 	else
+		scale="KB"
 		echo "Block Size (KB),Throughput (KB/s)" > "${directory}/out.txt"
 	fi
 else
 	check=$(grep 'aggrb=' "${directory}/${bs}.txt" | awk '{print $3}' | grep "K")
 	if [ "$check" = "" ]; then
+		scale="MB"
 		echo "Block Size (KB),Throughput (MB/s)" > "${directory}/out.txt"
 	else
+		scale="KB"
 		echo "Block Size (KB),Throughput (KB/s)" > "${directory}/out.txt"
 	fi
 fi
@@ -128,8 +132,44 @@ fi
 for bs in ${block_sizes[@]}; do
 	echo -n "$bs," >> "${directory}/out.txt"
 	if [ "$version" -eq 3 ]; then
-		grep 'bw=' "${directory}/${bs}.txt" | awk '{print $2}' | grep -o '[0-9.]*' >> "${directory}/out.txt"
+		check=$(grep 'bw=' "${directory}/${bs}.txt" | awk '{print $2}' | grep "K")
+
+		# Both in MBs, do nothing
+		if [ "$check" = "" ] && [ "$scale" = "MB" ]; then
+			grep 'bw=' "${directory}/${bs}.txt" | awk '{print $2}' | grep -o '[0-9.]*' >> "${directory}/out.txt"
+		# MB -> KB
+		elif [ "$check" = "" ] && [ "$scale" = "KB" ]; then
+			num=$(grep 'bw=' "${directory}/${bs}.txt" | awk '{print $2}' | grep -o '[0-9.]*')
+			res=$(echo "${num}*1024" | bc)
+			echo "$res" >> "${directory}/out.txt"
+		# KB -> MB
+		elif [ "$scale" = "MB" ]; then
+			num=$(grep 'bw=' "${directory}/${bs}.txt" | awk '{print $2}' | grep -o '[0-9.]*')
+			res=$(echo "${num}/1024" | bc)
+			echo "$res" >> "${directory}/out.txt"
+		# Both in KBs, do nothing
+		else 
+			grep 'bw=' "${directory}/${bs}.txt" | awk '{print $2}' | grep -o '[0-9.]*' >> "${directory}/out.txt"
+		fi
 	else
-		grep 'aggrb=' "${directory}/${bs}.txt" | awk '{print $3}' | grep -o '[0-9.]*' >> "${directory}/out.txt"
+		check=$(grep 'aggrb=' "${directory}/${bs}.txt" | awk '{print $3}' | grep "K")
+
+		# Both in MBs, do nothing
+		if [ "$check" = "" ] && [ "$scale" = "MB" ]; then
+			grep 'aggrb=' "${directory}/${bs}.txt" | awk '{print $3}' | grep -o '[0-9.]*' >> "${directory}/out.txt"
+		# MB -> KB
+		elif [ "$check" = "" ] && [ "$scale" = "KB" ]; then
+			num=$(grep 'aggrb=' "${directory}/${bs}.txt" | awk '{print $3}' | grep -o '[0-9.]*')
+			res=$(echo "${num}*1024" | bc)
+			echo "$res" >> "${directory}/out.txt"
+		# KB -> MB
+		elif [ "$scale" = "MB" ]; then
+			num=$(grep 'aggrb=' "${directory}/${bs}.txt" | awk '{print $3}' | grep -o '[0-9.]*')
+			res=$(echo "${num}/1024" | bc)
+			echo "$res" >> "${directory}/out.txt"
+		# Both in KBs, do nothing
+		else 
+			grep 'aggrb=' "${directory}/${bs}.txt" | awk '{print $3}' | grep -o '[0-9.]*' >> "${directory}/out.txt"
+		fi
 	fi
 done
