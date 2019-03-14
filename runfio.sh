@@ -134,40 +134,34 @@ for bs in ${block_sizes[@]}; do
 	if [ "$version" -eq 3 ]; then
 		check=$(grep 'bw=' "${directory}/${bs}.txt" | awk '{print $2}' | grep "K")
 
-		# Both in MBs, do nothing
-		if [ "$check" = "" ] && [ "$scale" = "MB" ]; then
-			grep 'bw=' "${directory}/${bs}.txt" | awk '{print $2}' | grep -o '[0-9.]*' >> "${directory}/out.txt"
 		# MB -> KB
-		elif [ "$check" = "" ] && [ "$scale" = "KB" ]; then
+		if [ "$check" = "" ] && [ "$scale" = "KB" ]; then
 			num=$(grep 'bw=' "${directory}/${bs}.txt" | awk '{print $2}' | grep -o '[0-9.]*')
 			res=$(echo "${num}*1024" | bc)
 			echo "$res" >> "${directory}/out.txt"
 		# KB -> MB
-		elif [ "$scale" = "MB" ]; then
+		elif [ ! "$check" = "" ] && [ "$scale" = "MB" ]; then
 			num=$(grep 'bw=' "${directory}/${bs}.txt" | awk '{print $2}' | grep -o '[0-9.]*')
 			res=$(echo "${num}/1024" | bc)
 			echo "$res" >> "${directory}/out.txt"
-		# Both in KBs, do nothing
+		# Same scale, do nothing
 		else 
 			grep 'bw=' "${directory}/${bs}.txt" | awk '{print $2}' | grep -o '[0-9.]*' >> "${directory}/out.txt"
 		fi
 	else
 		check=$(grep 'aggrb=' "${directory}/${bs}.txt" | awk '{print $3}' | grep "K")
 
-		# Both in MBs, do nothing
-		if [ "$check" = "" ] && [ "$scale" = "MB" ]; then
-			grep 'aggrb=' "${directory}/${bs}.txt" | awk '{print $3}' | grep -o '[0-9.]*' >> "${directory}/out.txt"
 		# MB -> KB
-		elif [ "$check" = "" ] && [ "$scale" = "KB" ]; then
+		if [ "$check" = "" ] && [ "$scale" = "KB" ]; then
 			num=$(grep 'aggrb=' "${directory}/${bs}.txt" | awk '{print $3}' | grep -o '[0-9.]*')
 			res=$(echo "${num}*1024" | bc)
 			echo "$res" >> "${directory}/out.txt"
 		# KB -> MB
-		elif [ "$scale" = "MB" ]; then
+		elif [ ! "$check" = "" ] && [ "$scale" = "MB" ]; then
 			num=$(grep 'aggrb=' "${directory}/${bs}.txt" | awk '{print $3}' | grep -o '[0-9.]*')
 			res=$(echo "${num}/1024" | bc)
 			echo "$res" >> "${directory}/out.txt"
-		# Both in KBs, do nothing
+		# Same scale, do nothing
 		else 
 			grep 'aggrb=' "${directory}/${bs}.txt" | awk '{print $3}' | grep -o '[0-9.]*' >> "${directory}/out.txt"
 		fi
