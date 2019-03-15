@@ -3,7 +3,7 @@
 args=("$@")
 directory="${args[0]}"
 block_sizes=("${args[@]:1}")
-bs="${block_sizes[0]}"
+bs="${block_sizes[-1]}"
 
 
 str="$(fio --version)"
