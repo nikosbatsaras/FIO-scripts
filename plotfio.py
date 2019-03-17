@@ -62,8 +62,8 @@ for f in args.files:
 plt.xlabel(args.xlabel)
 plt.ylabel(args.ylabel)
 
-plt.xlim(xmin=0)
-plt.ylim(ymin=0)
+plt.xlim(left=0)
+plt.ylim(bottom=0)
 
 plt.title(args.title)
 plt.legend()
