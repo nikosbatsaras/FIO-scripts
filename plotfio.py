@@ -1,8 +1,13 @@
 #!/usr/bin/env python3
 
+import matplotlib
+matplotlib.use('Agg')
+
 import matplotlib.pyplot as plt
 import numpy as np
 import csv, argparse
+
+matplotlib.use('Agg')
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-f', dest="files", type=str, nargs='+', required=True, help='The out.txt files')
