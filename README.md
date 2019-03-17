@@ -96,3 +96,6 @@ plotfio.py -f rand_w_sdb_1iodepth_1threads/out.txt rand_w_sdb_32iodepth_1threads
 	   -t "Random Writes on Samsung 850 Pro"
 ```
 The 'out.txt' files are the ones that plotfio.py needs.
+
+## TODO
+-  Automate plotting
