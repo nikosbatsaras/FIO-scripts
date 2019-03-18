@@ -27,7 +27,7 @@ By default, the script will run with:
 - for a variety of different I/O queue depths
 - for different block sizes
 
-All output is saved in the <output-dir> folder (e.g. SAMSUNG_850_PRO). The
+All output is saved in the 'output-dir' folder (e.g. SAMSUNG_850_PRO). The
 script will also generate various plots based on your configuration. For a
 finer-grained control of the runs, you can execute the runfio.sh and plotfio.sh
 scripts manually.
