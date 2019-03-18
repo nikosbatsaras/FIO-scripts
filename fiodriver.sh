@@ -60,7 +60,7 @@ for DEVICE in ${DEVICES[@]}; do
 		./runfio.sh -d "$DEVICE" -n 1 -i "$IOD" -f "${FIO_SCRIPTS}/read.fio"  -o "${OUTPUT}/seq_r_${DEVICE}_${IOD}iodepth"
 	done
 	# Generate plots
-	./plotall.sh "$OUTPUT" "$DEVICE" "${IODEPTH[@]}"
+	./plotall.sh "$OUTPUT" "$DEVICE" "$THREADS" "${IODEPTH[@]}"
 done
 
 ENDTIME=$(date +%s)

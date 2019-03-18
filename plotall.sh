@@ -4,7 +4,8 @@ args=("$@")
 FIO_DIR="${args[0]}"
 FIO_OUT="${args[0]}"
 DEV="${args[1]}"
-IODEPTHS=("${args[@]:2}")
+THREADS="${args[2]}"
+IODEPTHS=("${args[@]:3}")
 
 LABELS=( )
 for (( i=0; i<${#IODEPTHS[@]}; i++ )); do
@@ -17,10 +18,10 @@ FILES_RAND_W=( )
 FILES_RAND_R=( )
 
 for IODEPTH in ${IODEPTHS[@]}; do
-	FILES_W+=( "${FIO_DIR}"/seq_w_"${DEV}"_"${IODEPTH}"iodepth/out.txt )
-	FILES_R+=( "${FIO_DIR}"/seq_r_"${DEV}"_"${IODEPTH}"iodepth/out.txt )
-	FILES_RAND_W+=( "${FIO_DIR}"/rand_w_"${DEV}"_"${IODEPTH}"iodepth_1threads/out.txt )
-	FILES_RAND_R+=( "${FIO_DIR}"/rand_r_"${DEV}"_"${IODEPTH}"iodepth_1threads/out.txt )
+	FILES_W+=( "${FIO_DIR}/seq_w_${DEV}_${IODEPTH}iodepth/out.txt" )
+	FILES_R+=( "${FIO_DIR}/seq_r_${DEV}_${IODEPTH}iodepth/out.txt" )
+	FILES_RAND_W+=( "${FIO_DIR}/rand_w_${DEV}_${IODEPTH}iodepth_${THREADS}threads/out.txt" )
+	FILES_RAND_R+=( "${FIO_DIR}/rand_r_${DEV}_${IODEPTH}iodepth_${THREADS}threads/out.txt" )
 done
 
 # RANDOM WRITES
