@@ -6,7 +6,7 @@ block_sizes=("${args[@]:1}")
 bs="${block_sizes[-1]}"
 
 
-str="$(fio --version)"
+str="$(/home/nx05/nx05/kolokasis/fio-fio-3.10/fio --version)"
 version="${str:4:1}"
 
 if [ "$version" -eq 3 ]; then
