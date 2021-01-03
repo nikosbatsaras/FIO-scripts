@@ -1,10 +1,6 @@
 #!/usr/bin/env bash
 
-DEVICES=( pmem_fsdax0 )
-THREADS=1
-IODEPTH=( 1 4 16 32 64 )
-FIO_SCRIPTS='/home/nx05/nx05/kolokasis/FIO-scripts/scripts'
-RUN_FIO='/home/nx05/nx05/kolokasis/FIO-scripts/runfio.sh'
+source $HOME/$(dirname "$0")/conf/config.sh
 
 function usage() {
         echo
@@ -50,15 +46,35 @@ STARTTIME=$(date +%s)
 
 for DEVICE in ${DEVICES[@]}; do
 	for IOD in ${IODEPTH[@]}; do
+		for THREAD in ${THREADS[@]}; do
 		# RANDOM WRITES
-		$RUN_FIO -d "$DEVICE" -n "$THREADS" -i "$IOD" -f "${FIO_SCRIPTS}/rand-write.fio" -o "${OUTPUT}/rand_w_${DEVICE}_${IOD}iodepth_${THREADS}threads"
+		$RUN_FIO -d "$DEVICE" \
+				 -n "$THREAD" \
+				 -i "$IOD" \
+				 -f "${FIO_SCRIPTS}/rand-write.fio" \
+				 -o "${OUTPUT}/rand_w_${DEVICE}_${IOD}iodepth_${THREADS}threads"
+
 		# RANDOM READS
-		$RUN_FIO -d "$DEVICE" -n "$THREADS" -i "$IOD" -f "${FIO_SCRIPTS}/rand-read.fio"  -o "${OUTPUT}/rand_r_${DEVICE}_${IOD}iodepth_${THREADS}threads"
+		$RUN_FIO -d "$DEVICE" \
+				 -n "$THREAD" \
+				 -i "$IOD" \
+				 -f "${FIO_SCRIPTS}/rand-read.fio"  \
+				 -o "${OUTPUT}/rand_r_${DEVICE}_${IOD}iodepth_${THREADS}threads"
 
 		# SEQUENTIAL WRITES
-		$RUN_FIO -d "$DEVICE" -n 1 -i "$IOD" -f "${FIO_SCRIPTS}/write.fio" -o "${OUTPUT}/seq_w_${DEVICE}_${IOD}iodepth"
+		$RUN_FIO -d "$DEVICE" \
+				 -n "$THREAD" \
+				 -i "$IOD" \
+				 -f "${FIO_SCRIPTS}/write.fio" \
+				 -o "${OUTPUT}/seq_w_${DEVICE}_${IOD}iodepth"
+
 		# SEQUENTIAL READS
-		$RUN_FIO -d "$DEVICE" -n 1 -i "$IOD" -f "${FIO_SCRIPTS}/read.fio"  -o "${OUTPUT}/seq_r_${DEVICE}_${IOD}iodepth"
+		$RUN_FIO -d "$DEVICE" \
+				 -n "$THREAD" \
+				 -i "$IOD" \
+				 -f "${FIO_SCRIPTS}/read.fio" \
+				 -o "${OUTPUT}/seq_r_${DEVICE}_${IOD}iodepth"
+		done
 	done
 	# Generate plots
 	#./plotall.sh "$OUTPUT" "$DEVICE" "$THREADS" "${IODEPTH[@]}"

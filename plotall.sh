@@ -25,7 +25,7 @@ for IODEPTH in ${IODEPTHS[@]}; do
 done
 
 # RANDOM WRITES
-./plotfio.py                           \
+./plotfio.py                       \
 	-f "${FILES_RAND_W[@]}"        \
 	-l "${LABELS[@]}"              \
 	-x "Request size (KB)"         \
@@ -36,7 +36,7 @@ done
 	-s "MB"
 
 # RANDOM READS
-./plotfio.py                           \
+./plotfio.py                       \
 	-f "${FILES_RAND_R[@]}"        \
 	-l "${LABELS[@]}"              \
 	-x "Request size (KB)"         \
@@ -47,7 +47,7 @@ done
 	-s "MB"
 
 # SEQUENTIAL WRITES
-./plotfio.py                           \
+./plotfio.py                       \
 	-f "${FILES_W[@]}"             \
 	-l "${LABELS[@]}"              \
 	-x "Request size (KB)"         \
@@ -58,7 +58,7 @@ done
 	-s "MB"
 
 # SEQUENTIAL READS
-./plotfio.py                           \
+./plotfio.py                       \
 	-f "${FILES_R[@]}"             \
 	-l "${LABELS[@]}"              \
 	-x "Request size (KB)"         \

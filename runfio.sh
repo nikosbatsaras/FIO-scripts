@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+source $HOME/$(dirname "$0")/conf/config.sh
+
 block_sizes=( 4 8 16 32 64 128 256 512 1024 2048 4096 8192 )
 
 function usage() {
@@ -23,9 +25,9 @@ while getopts ":d:n:i:f:o:h" opt
 do
         case $opt in
                 d)
-                        #if [ ! -b "/mnt/$OPTARG" ]; then
-                        #        echo "ERROR: Block device $OPTARG does not exist." >&2; usage
-                        #fi
+                        if [ ! -b "$OPTARG" ]; then
+                                echo "ERROR: Block device $OPTARG does not exist." >&2; usage
+                        fi
 
                         blockdevice="$OPTARG";;
                 n)
@@ -97,4 +99,4 @@ echo
 echo "========================================================================"
 echo
 
-/home/nx05/nx05/kolokasis/FIO-scripts/parser.sh "$directory" "${block_sizes[@]}"
+${FIO_PATH}/parser.sh "$directory" "${block_sizes[@]}"
