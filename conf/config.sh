@@ -1,15 +1,17 @@
 #!/usr/bin/env bash
 
-FIO='/home/nx05/nx05/kolokasis/fio-fio-3.10/fio'
+# Uncomment configuration parameters
 
-FIO_PATH='/home/nx05/nx05/kolokasis/FIO-scripts'
+#FIO= <Path to the fio>
 
-FIO_SCRIPTS="${FIO_PATH}/scripts/pmem"
+#FIO_PATH=<path to the fio directory>
 
-RUN_FIO="${FIO_PATH}/runfio.sh"
+#FIO_SCRIPTS=<path to the fio scripts>
 
-DEVICES=( '/mnt/pmem_fsdax0' )
+#RUN_FIO=<path to the runfio.sh>
 
-THREADS=( 1 2 4 8 16 32 48 )
+#DEVICES=( '/mnt/pmem_fsdax0' )
 
-IODEPTH=( 1 4 16 32 64 )
+#THREADS=( 1 2 4 8 16 32 48 )
+
+#IODEPTH=( 1 4 16 32 64 )
