@@ -1,0 +1,12 @@
+[write]
+rw=write
+size=${SIZE}
+bs=${BLOCK_SIZE}
+direct=1
+directory=/mnt/${DEVICE}
+iodepth=${IODEPTH}
+ioengine=libpmem
+time_based
+runtime=20
+numjobs=${NJOBS}
+thread

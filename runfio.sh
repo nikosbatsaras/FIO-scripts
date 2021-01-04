@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+source $HOME/$(dirname "$0")/conf/config.sh
+
 block_sizes=( 4 8 16 32 64 128 256 512 1024 2048 4096 8192 )
 
 function usage() {
@@ -23,16 +25,10 @@ while getopts ":d:n:i:f:o:h" opt
 do
         case $opt in
                 d)
-                        if [ ! -b "/dev/$OPTARG" ]; then
+                        if [ ! -b "$OPTARG" ]; then
                                 echo "ERROR: Block device $OPTARG does not exist." >&2; usage
                         fi
 
-                        check=$(mount | grep "$OPTARG")
-                        if [ ! "$check" = '' ]; then
-                                echo "ERROR: Block device $OPTARG is in use. Use another one."
-				exit 1
-                        fi
-        
                         blockdevice="$OPTARG";;
                 n)
                         njobs="$OPTARG";;
@@ -90,11 +86,8 @@ echo
 echo -n "    Block Size: "
 STARTTIME=$(date +%s)
 for bs in ${block_sizes[@]}; do
-	if [ $(cat "/sys/block/${blockdevice}/queue/rotational") -eq 0 ]; then
-		sudo blkdiscard /dev/"$blockdevice"
-	fi
 	echo -n "${bs}KB "
-	{ sudo SIZE='80%' BLOCK_SIZE="${bs}k" DEVICE="$blockdevice" IODEPTH="$iodepth" NJOBS="$njobs" fio "$file" ; } 2>&1 >> "${directory}/${bs}.txt"
+	{ SIZE='100g' BLOCK_SIZE="${bs}k" DEVICE="$blockdevice" IODEPTH="$iodepth" NJOBS="$njobs" /home/nx05/nx05/kolokasis/fio-fio-3.10/fio "$file" ; } 2>&1 >> "${directory}/${bs}.txt"
 done
 echo
 ENDTIME=$(date +%s)
@@ -106,4 +99,4 @@ echo
 echo "========================================================================"
 echo
 
-./parser.sh "$directory" "${block_sizes[@]}"
+${FIO_PATH}/parser.sh "$directory" "${block_sizes[@]}"
